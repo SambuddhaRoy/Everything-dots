@@ -50,8 +50,8 @@ Singleton {
     // the accent kept for small signals. Settings > Appearance can switch
     // controls to accent fills instead.
     readonly property bool accentFills: Config.get("look.accentFills") === true
-    readonly property color on: accentFills ? accent : fg
-    readonly property color onFg: accentFills ? accentFg : bg
+    readonly property color active: accentFills ? accent : fg
+    readonly property color activeFg: accentFills ? accentFg : bg
 
     // Translucent surfaces; Hyprland blurs what's behind them (rules.lua).
     readonly property color glass: Qt.alpha(bg, Config.get("pill.opacity"))

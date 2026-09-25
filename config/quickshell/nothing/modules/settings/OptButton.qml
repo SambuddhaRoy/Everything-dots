@@ -14,7 +14,7 @@ Rectangle {
     width: row.width + 30
     height: 34
     radius: Theme.r(17)
-    color: accent ? Theme.on : (m.containsMouse ? Theme.raised : "transparent")
+    color: accent ? Theme.active : (m.containsMouse ? Theme.raised : "transparent")
     border.width: accent ? 0 : 1
     border.color: Theme.faint
     Behavior on color { ColorAnimation { duration: 150 } }
@@ -28,13 +28,13 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             text: b.icon
             size: 16
-            color: b.accent ? Theme.onFg : Theme.fg
+            color: b.accent ? Theme.activeFg : Theme.fg
         }
         Label {
             anchors.verticalCenter: parent.verticalCenter
             text: b.text
             font.pixelSize: 12
-            color: b.accent ? Theme.onFg : Theme.fg
+            color: b.accent ? Theme.activeFg : Theme.fg
         }
     }
     MouseArea {

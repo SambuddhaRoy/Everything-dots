@@ -96,12 +96,12 @@ Scope {
                         x: 18
                         y: 28
                         width: parent.width - 36
-                        spacing: 4
+                        spacing: 2
 
                         Row {
                             x: 10
                             spacing: 10
-                            bottomPadding: 22
+                            bottomPadding: 16
                             Rectangle {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: 10
@@ -122,7 +122,7 @@ Scope {
                                 required property var modelData
                                 readonly property bool on: root.page === modelData.id
                                 width: parent.width
-                                height: 40
+                                height: 36
                                 radius: Theme.r(height / 2)
                                 color: on ? Theme.fg : (m.containsMouse ? Theme.card : "transparent")
                                 Behavior on color { ColorAnimation { duration: 150 } }

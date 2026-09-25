@@ -17,9 +17,8 @@ Column {
 
     Row {
         width: parent.width
-        Icon { visible: !root.embedded; text: "arrow_back"; size: 18; anchors.verticalCenter: parent.verticalCenter
-            MouseArea { anchors.fill: parent; anchors.margins: -6; cursorShape: Qt.PointingHandCursor; onClicked: Ui.open("control") } }
-        Overline { leftPadding: 10; width: parent.width - (root.embedded ? 0 : 18) - sw.width; anchors.verticalCenter: parent.verticalCenter; text: "Bluetooth" + (Net.adapter?.discovering ? " · scanning" : "") }
+        CircleButton { visible: !root.embedded; size: 32; icon: "arrow_back"; anchors.verticalCenter: parent.verticalCenter; onClicked: Ui.open("control") }
+        Overline { leftPadding: 10; width: parent.width - (root.embedded ? 0 : 32) - sw.width; anchors.verticalCenter: parent.verticalCenter; text: "Bluetooth" + (Net.adapter?.discovering ? " · scanning" : "") }
         Switch { id: sw; checked: Net.btOn; onToggled: on => { Net.setBt(on); if (on) Net.setDiscovering(true); } }
     }
 

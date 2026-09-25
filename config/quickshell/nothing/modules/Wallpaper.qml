@@ -28,7 +28,22 @@ PanelWindow {
     function show(path) {
         if (!path || front.source.toString() === "file://" + path)
             return;
-        back.source = "file://" + path;
+        const url = "file://" + path;
+        // Going back to the previous wallpaper: it's still loaded in the
+        // hidden layer, so there's no load event - swap straight away.
+        if (back.source.toString() === url && back.status === Image.Ready)
+            swap(back);
+        else
+            back.source = url;
+    }
+    function swap(img) {
+        img.z = 1;
+        front.z = 0;
+        fadeIn.target = img;
+        fadeIn.restart();
+        const old = front;
+        front = img;
+        back = old;
     }
 
     Connections {
@@ -45,15 +60,8 @@ PanelWindow {
         sourceSize: Qt.size(win.width, win.height)
         opacity: 0
         onStatusChanged: {
-            if (status === Image.Ready && this === win.back) {
-                z = 1;
-                win.front.z = 0;
-                fadeIn.target = this;
-                fadeIn.restart();
-                const old = win.front;
-                win.front = this;
-                win.back = old;
-            }
+            if (status === Image.Ready && this === win.back)
+                win.swap(this);
         }
     }
 

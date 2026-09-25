@@ -15,7 +15,7 @@ Rectangle {
 
     implicitHeight: 80
     radius: Theme.radius
-    color: on ? Theme.on : (hover.containsMouse ? Theme.raised : Theme.card)
+    color: on ? Theme.active : (hover.containsMouse ? Theme.raised : Theme.card)
     Behavior on color { ColorAnimation { duration: 180 } }
     scale: hover.pressed ? 0.97 : 1
     Behavior on scale { NumberAnimation { duration: 120 } }
@@ -34,7 +34,7 @@ Rectangle {
         text: root.icon
         size: 18
         filled: root.on
-        color: root.on ? Theme.onFg : Theme.fg
+        color: root.on ? Theme.activeFg : Theme.fg
     }
     Icon {
         visible: root.more
@@ -45,7 +45,7 @@ Rectangle {
         height: 24
         text: "chevron_right"
         size: 18
-        color: root.on ? Theme.onFg : Theme.dim
+        color: root.on ? Theme.activeFg : Theme.dim
         MouseArea {
             anchors.fill: parent
             anchors.margins: -4
@@ -63,7 +63,7 @@ Rectangle {
             text: root.label
             font.pixelSize: 12
             font.weight: Font.Medium
-            color: root.on ? Theme.onFg : Theme.fg
+            color: root.on ? Theme.activeFg : Theme.fg
         }
         Caption {
             width: parent.width
@@ -72,7 +72,7 @@ Rectangle {
             font.pixelSize: 9
             font.letterSpacing: 1
             elide: Text.ElideRight
-            color: root.on ? Qt.alpha(Theme.onFg, 0.75) : Theme.dim
+            color: root.on ? Qt.alpha(Theme.activeFg, 0.75) : Theme.dim
         }
     }
 }

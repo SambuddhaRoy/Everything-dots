@@ -21,17 +21,12 @@ Column {
     Row {
         width: parent.width
         spacing: 10
-        Icon {
+        CircleButton {
             visible: root.stack.length > 1
             anchors.verticalCenter: parent.verticalCenter
-            text: "arrow_back"
-            size: 16
-            MouseArea {
-                anchors.fill: parent
-                anchors.margins: -6
-                cursorShape: Qt.PointingHandCursor
-                onClicked: root.stack = root.stack.slice(0, -1)
-            }
+            size: 30
+            icon: "arrow_back"
+            onClicked: root.stack = root.stack.slice(0, -1)
         }
         Image {
             anchors.verticalCenter: parent.verticalCenter

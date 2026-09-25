@@ -22,7 +22,7 @@ Rectangle {
         height: parent.height
         width: Math.max(parent.height, parent.width * Math.max(0, Math.min(1, root.value)))
         radius: Theme.r(height / 2)
-        color: Theme.on
+        color: Theme.active
         Behavior on width { NumberAnimation { duration: mouse.pressed ? 0 : 220; easing.type: Easing.OutCubic } }
     }
     Icon {
@@ -33,7 +33,7 @@ Rectangle {
         text: root.icon
         size: 19
         filled: true
-        color: Theme.onFg
+        color: Theme.activeFg
     }
     Caption {
         anchors.right: parent.right
@@ -42,7 +42,7 @@ Rectangle {
         text: Math.round(root.value * 100)
         font.pixelSize: 11
         // readable whether or not the fill reaches under it
-        color: fill.width > parent.width - 50 ? Theme.onFg : Theme.fg
+        color: fill.width > parent.width - 50 ? Theme.activeFg : Theme.fg
     }
 
     MouseArea {

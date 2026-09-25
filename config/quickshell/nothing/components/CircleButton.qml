@@ -13,7 +13,7 @@ Rectangle {
     implicitWidth: size
     implicitHeight: size
     radius: Theme.r(size / 2)
-    color: active ? Theme.on : (mouse.containsMouse ? Theme.raised : "transparent")
+    color: active ? Theme.active : (mouse.containsMouse ? Theme.raised : "transparent")
     border.width: active ? 0 : 1
     border.color: Theme.faint
 
@@ -24,7 +24,7 @@ Rectangle {
         text: root.icon
         size: root.size * 0.48
         filled: root.active
-        color: root.active ? Theme.onFg : Theme.fg
+        color: root.active ? Theme.activeFg : Theme.fg
     }
 
     MouseArea {

@@ -17,10 +17,10 @@ Page {
         width: ct.implicitWidth + 24
         height: 30
         radius: Theme.r(height / 2)
-        color: on ? Theme.on : (cm.containsMouse ? Theme.raised : "transparent")
+        color: on ? Theme.active : (cm.containsMouse ? Theme.raised : "transparent")
         border.width: on ? 0 : 1
         border.color: Theme.faint
-        Caption { id: ct; anchors.centerIn: parent; text: c.text; color: c.on ? Theme.onFg : Theme.fg; font.pixelSize: 11 }
+        Caption { id: ct; anchors.centerIn: parent; text: c.text; color: c.on ? Theme.activeFg : Theme.fg; font.pixelSize: 11 }
         MouseArea { id: cm; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: c.clicked() }
     }
 

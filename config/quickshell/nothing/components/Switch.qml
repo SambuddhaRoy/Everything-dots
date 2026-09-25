@@ -11,7 +11,7 @@ Rectangle {
     implicitWidth: 38
     implicitHeight: 22
     radius: Theme.r(height / 2)
-    color: checked ? Theme.on : "transparent"
+    color: checked ? Theme.active : "transparent"
     border.width: checked ? 0 : 1
     border.color: Theme.faint
     Behavior on color { ColorAnimation { duration: 180 } }
@@ -22,7 +22,7 @@ Rectangle {
         radius: Theme.r(7)
         anchors.verticalCenter: parent.verticalCenter
         x: root.checked ? root.width - width - 4 : 4
-        color: root.checked ? Theme.onFg : Theme.dim
+        color: root.checked ? Theme.activeFg : Theme.dim
         Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
     }
     MouseArea {

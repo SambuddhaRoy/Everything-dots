@@ -13,7 +13,9 @@ Item {
     readonly property var items: SystemTray.items.values.filter(i => i.status !== Status.Passive)
     readonly property bool open: Ui.trayOpen
 
-    implicitWidth: row.width
+    // pad the right so the grip's hit area stays inside the tray (the status
+    // area's click target sits right next to it, on top)
+    implicitWidth: row.width + 6
     implicitHeight: 20
 
     Row {
@@ -102,7 +104,7 @@ Item {
 
     MouseArea {
         id: grip
-        x: row.width - 12
+        x: row.width - 14
         width: 20
         height: parent.height
         anchors.verticalCenter: parent.verticalCenter

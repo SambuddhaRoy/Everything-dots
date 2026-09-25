@@ -258,10 +258,10 @@ Item {
                     width: 42 * root.s
                     height: width
                     radius: Theme.r(width / 2)
-                    color: Theme.on
+                    color: Theme.active
                     opacity: input.text.length > 0 ? 1 : 0
                     Behavior on opacity { NumberAnimation { duration: 150 } }
-                    Icon { anchors.centerIn: parent; text: "arrow_forward"; size: 20 * root.s; color: Theme.onFg }
+                    Icon { anchors.centerIn: parent; text: "arrow_forward"; size: 20 * root.s; color: Theme.activeFg }
                     MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.submit() }
                 }
 

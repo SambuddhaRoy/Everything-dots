@@ -19,9 +19,8 @@ Column {
 
     Row {
         width: parent.width
-        Icon { visible: !root.embedded; text: "arrow_back"; size: 18; anchors.verticalCenter: parent.verticalCenter
-            MouseArea { anchors.fill: parent; anchors.margins: -6; cursorShape: Qt.PointingHandCursor; onClicked: Ui.open("control") } }
-        Overline { leftPadding: 10; width: parent.width - (root.embedded ? 0 : 18) - sw.width; anchors.verticalCenter: parent.verticalCenter; text: "Wi-Fi" + (Net.active ? " · " + Net.active.name : "") }
+        CircleButton { visible: !root.embedded; size: 32; icon: "arrow_back"; anchors.verticalCenter: parent.verticalCenter; onClicked: Ui.open("control") }
+        Overline { leftPadding: 10; width: parent.width - (root.embedded ? 0 : 32) - sw.width; anchors.verticalCenter: parent.verticalCenter; text: "Wi-Fi" + (Net.active ? " · " + Net.active.name : "") }
         Switch { id: sw; checked: Net.wifiOn; onToggled: on => Net.setWifi(on) }
     }
 

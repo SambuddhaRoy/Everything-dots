@@ -126,16 +126,21 @@ Item {
             visible: root.has && (root.p?.length ?? 0) > 0
             width: col.width
             spacing: 6
-            DotMatrix {
-                id: prog
-                readonly property int cols: Math.floor((col.width + 3) / 7)
-                readonly property real frac: root.p && root.p.length > 0 ? root.p.position / root.p.length : 0
-                rows: [Array.from({ length: cols }, (_, i) => i <= Math.floor(frac * cols) ? "#" : ".").join("")]
-                dot: 4
-                gap: 3
-                color: Theme.fg
-                offOpacity: 0.15
-                glow: false
+            Item {
+                width: prog.width
+                height: prog.height
+                DotMatrix {
+                    id: prog
+                    readonly property int cols: Math.floor((col.width + 3) / 7)
+                    readonly property real frac: root.p && root.p.length > 0 ? root.p.position / root.p.length : 0
+                    rows: [Array.from({ length: cols }, (_, i) => i <= Math.floor(frac * cols) ? "#" : ".").join("")]
+                    dot: 4
+                    gap: 3
+                    color: Theme.fg
+                    offOpacity: 0.15
+                    glow: false
+                }
+                // Grids can't hold anchored children, so the seek area is a sibling
                 MouseArea {
                     anchors.fill: parent
                     anchors.margins: -8
@@ -226,10 +231,10 @@ Item {
                     width: pl.implicitWidth + 22
                     height: 28
                     radius: Theme.r(height / 2)
-                    color: on ? Theme.on : "transparent"
+                    color: on ? Theme.active : "transparent"
                     border.width: on ? 0 : 1
                     border.color: Theme.faint
-                    Caption { id: pl; anchors.centerIn: parent; text: parent.modelData.identity; color: parent.on ? Theme.onFg : Theme.fg }
+                    Caption { id: pl; anchors.centerIn: parent; text: parent.modelData.identity; color: parent.on ? Theme.activeFg : Theme.fg }
                     MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: Player.pinned = parent.modelData }
                 }
             }

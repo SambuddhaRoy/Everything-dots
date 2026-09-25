@@ -56,10 +56,10 @@ Column {
         width: ct.implicitWidth + 24
         height: 28
         radius: Theme.r(height / 2)
-        color: on ? Theme.on : "transparent"
+        color: on ? Theme.active : "transparent"
         border.width: on ? 0 : 1
         border.color: Theme.faint
-        Caption { id: ct; anchors.centerIn: parent; text: c.text; color: c.on ? Theme.onFg : Theme.fg }
+        Caption { id: ct; anchors.centerIn: parent; text: c.text; color: c.on ? Theme.activeFg : Theme.fg }
         MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: c.clicked() }
     }
 
