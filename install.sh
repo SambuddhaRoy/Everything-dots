@@ -129,7 +129,8 @@ install_packages() {
 
 install_fonts() {
     local dir="$HOME/.local/share/fonts/everything-dots" base="https://raw.githubusercontent.com/google/fonts/main/ofl"
-    if fc-list | grep -q "Instrument Serif" && fc-list | grep -q "Space Mono"; then return; fi
+    local fams; fams="$(fc-list : family 2>/dev/null)" # (grep -q on a pipe trips pipefail)
+    if grep -q "Instrument Serif" <<<"$fams" && grep -q "Space Mono" <<<"$fams"; then return; fi
     say "Installing fonts (Instrument Serif, Space Mono — OFL)"
     mkdir -p "$dir"
     # Regular/Bold only: Qt picks Space Mono's italic face otherwise.
