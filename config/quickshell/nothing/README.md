@@ -36,6 +36,14 @@ frosted glass. Dot-matrix elements can bloom (Settings > Appearance).
 Volume/brightness changes and notifications pop up in the pill on their own,
 and polkit password prompts show up there too.
 
+## Welcome tour and cheat sheet
+
+The first time the shell starts it shows a short tour (wallpaper, look,
+colour, weather, keys). It's stored in `~/.local/state/nothing/onboarded`;
+reopen it from Settings > About or with `qs -c nothing ipc call onboarding open`.
+`Super + /` (or `ipc call cheatsheet toggle`) shows every bind, grouped and
+searchable, read live from Hyprland.
+
 ## Launcher (tap `Super`)
 
 Lives in the pill and never unloads, so icons are already decoded when it

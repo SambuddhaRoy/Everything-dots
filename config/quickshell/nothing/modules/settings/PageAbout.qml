@@ -77,6 +77,16 @@ Page {
             OptButton { text: "Open"; icon: "folder_open"; onClicked: Qt.openUrlExternally("file://" + Quickshell.env("HOME") + "/.config/hypr") }
         }
         OptRow {
+            label: "Welcome tour"
+            sub: "The first-run setup: wallpaper, look, colour, weather, keys"
+            OptButton { text: "Show again"; icon: "waving_hand"; onClicked: Quickshell.execDetached(["qs", "-c", "nothing", "ipc", "call", "onboarding", "open"]) }
+        }
+        OptRow {
+            label: "Keybind cheat sheet"
+            sub: "Super + /"
+            OptButton { text: "Open"; icon: "keyboard"; onClicked: Quickshell.execDetached(["qs", "-c", "nothing", "ipc", "call", "cheatsheet", "toggle"]) }
+        }
+        OptRow {
             label: "Reload the shell"
             sub: "Restarts Quickshell (Ctrl + Super + R)"
             OptButton { text: "Reload"; icon: "refresh"; onClicked: Quickshell.execDetached(["sh", "-c", "killall qs quickshell; qs -c nothing &"]) }

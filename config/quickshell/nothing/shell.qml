@@ -32,6 +32,8 @@ ShellRoot {
     // session-lock code, so file watching pauses until you unlock.
     settings.watchFiles: !lock.locked
     Settings {}
+    Cheatsheet {}
+    Onboarding {}
 
     // Instantiate services that must run from startup.
     Component.onCompleted: [Notifs, Agent, Audio, Brightness, Forecast, Toggles, Net]
