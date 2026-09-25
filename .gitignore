@@ -1,0 +1,14 @@
+# Personal state written by the shell - never commit
+config/quickshell/nothing/config.json
+config/quickshell/nothing/hyprland.json
+config/quickshell/nothing/keybinds.json
+# Generated at runtime
+config/hypr/hyprland/colors.lua
+config/hypr/hyprland/look.lua
+config/hypr/hyprland/settings.lua
+config/hypr/hyprland/keybinds-custom.lua
+config/hypr/hypridle.conf
+config/hypr/hyprlock/
+config/hypr/hyprland-gui.lua
+*.part
+.qmlls.ini
