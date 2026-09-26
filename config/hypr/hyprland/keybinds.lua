@@ -9,8 +9,11 @@ local qsIpcCall = "qs -c $qsConfig ipc call"
 
 --##! Shell
 -- Launcher is fuzzel (themed via ~/.config/quickshell/nothing/bin/fuzzel).
-hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd("qs -c nothing ipc call shell toggle launcher || pkill fuzzel || fuzzel"), { description = "Shell: App launcher" })
-hl.bind("SUPER + SUPER_R", hl.dsp.exec_cmd("qs -c nothing ipc call shell toggle launcher || pkill fuzzel || fuzzel"))
+-- Launcher, clipboard and emoji go through launcher.sh: vicinae when it's
+-- running, the pill launcher / fuzzel otherwise.
+local launcher = "$HOME/.config/quickshell/nothing/scripts/launcher.sh"
+hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd(launcher .. " apps"), { description = "Shell: App launcher" })
+hl.bind("SUPER + SUPER_R", hl.dsp.exec_cmd(launcher .. " apps"))
 -- These names are GlobalShortcuts in ~/.config/quickshell/nothing/shell.qml
 hl.bind("SUPER + N", hl.dsp.global("quickshell:sidebarRightToggle"), { description = "Shell: Quick settings" })
 hl.bind("SUPER + A", hl.dsp.global("quickshell:calendarToggle"), { description = "Shell: Calendar" })
@@ -39,12 +42,8 @@ hl.bind("CTRL + SUPER + R", hl.dsp.exec_cmd("$HOME/.config/quickshell/nothing/sc
 
 --##! Utilities
 --# Screenshot, Record, OCR, Color picker, Clipboard history
-hl.bind("SUPER + V", hl.dsp.exec_cmd(
-        "pkill fuzzel || cliphist list | fuzzel --match-mode fzf --dmenu | cliphist decode | wl-copy"),
-    { description = "Utilities: Clipboard history >> clipboard" })
-hl.bind("SUPER + Period", hl.dsp.exec_cmd(
-        "pkill fuzzel || " .. hyprScripts .. "/fuzzel-emoji.sh copy"),
-    { description = "Utilities: Emoji >> clipboard" })
+hl.bind("SUPER + V", hl.dsp.exec_cmd(launcher .. " clipboard"), { description = "Utilities: Clipboard history" })
+hl.bind("SUPER + Period", hl.dsp.exec_cmd(launcher .. " emoji"), { description = "Utilities: Emoji picker" })
 hl.bind("SUPER + SHIFT + S",
     hl.dsp.exec_cmd("pidof slurp || $HOME/.config/quickshell/nothing/scripts/capture.sh shot area"),
     { description = "Utilities: Screenshot area (saved + clipboard)" })

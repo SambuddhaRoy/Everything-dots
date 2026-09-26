@@ -81,7 +81,7 @@ One island at the top of the screen that grows into whatever you open.
 | | |
 |:---:|:---:|
 | <img src="assets/launcher.webp" alt="Launcher"> | <img src="assets/quick-settings.webp" alt="Quick settings"> |
-| **Launcher.** Instant, ranked by use. `2*21` calculates, `=` uses qalculate, `> cmd` runs a command. | **Quick settings.** Nothing-style tiles, pill sliders, palette, capture, power. |
+| **Launcher.** [vicinae](https://vicinae.com) (apps, clipboard, emoji, files, extensions), themed from the wallpaper. If vicinae isn't running, the pill's own launcher (shown) takes over. | **Quick settings.** Nothing-style tiles, pill sliders, palette, capture, power. |
 | <img src="assets/weather.webp" alt="Weather"> | <img src="assets/calendar.webp" alt="Calendar"> |
 | **Weather.** Open-Meteo hourly and 7-day, animated dot-matrix glyphs. | **Calendar.** Dot-matrix clock, weekends in the accent colour. |
 | <img src="assets/capture.webp" alt="Capture"> | <img src="assets/wallpapers.webp" alt="Wallpapers"> |
@@ -137,7 +137,8 @@ dots chase while charging), system meters and a sticky note. All of them can be 
 
 | Keys | |
 |---|---|
-| `Super` (tap) | launcher |
+| `Super` (tap) | launcher (vicinae) |
+| `Super + V` · `Super + .` | clipboard history · emoji |
 | `Super + /` | all keys |
 | `Super + I` | settings |
 | `Super + N` · `Super + M` · `Super + A` | quick settings · media · calendar |

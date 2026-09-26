@@ -46,6 +46,17 @@ searchable, read live from Hyprland.
 
 ## Launcher (tap `Super`)
 
+Tap Super, Super+V and Super+. run `scripts/launcher.sh`, which uses
+[vicinae](https://vicinae.com) when its server is running (started only in the
+Hyprland session) and falls back to the pill launcher and fuzzel otherwise.
+vicinae is themed by `matugen/templates/vicinae.toml` (hot-reloaded on every
+wallpaper change). Its settings live in `apps/vicinae/settings.json`, imported
+from `~/.config/vicinae/settings.json`. Keep that file free of comments: vicinae
+silently ignores imported files that contain them.
+
+### Pill launcher (fallback)
+
+
 Lives in the pill and never unloads, so icons are already decoded when it
 opens. Empty query shows a grid (most-used first); typing ranks apps by name,
 keywords and how often you launch them. `2*21` or `=` + anything (qalculate:

@@ -61,6 +61,9 @@ Singleton {
         switch (b.dsp) {
         case "exec_cmd": {
             const cmd = String(a0 ?? "");
+            if (cmd.includes("launcher.sh apps")) return "Open the launcher (vicinae, or the pill launcher)";
+            if (cmd.includes("launcher.sh clipboard")) return "Clipboard history (vicinae, or fuzzel)";
+            if (cmd.includes("launcher.sh emoji")) return "Emoji picker (vicinae, or fuzzel)";
             if (cmd.includes("toggle launcher")) return "Open the app launcher (fuzzel if the shell isn't running)";
             const m = /^gtk-launch\s+(\S+)/.exec(cmd);
             if (m) return "Open " + appName(m[1]);
