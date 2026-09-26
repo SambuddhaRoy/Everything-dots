@@ -73,9 +73,11 @@ Scope {
         FloatingWindow {
             id: win
             title: "Nothing Settings"
-            implicitWidth: 1000
-            implicitHeight: 680
-            minimumSize: Qt.size(820, 520)
+            // 1000x680 logical px, shrunk to fit small or heavily scaled screens
+            readonly property var scr: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
+            implicitWidth: Math.min(1000, Math.round((scr?.width ?? 1920) * 0.9))
+            implicitHeight: Math.min(680, Math.round((scr?.height ?? 1080) * 0.85))
+            minimumSize: Qt.size(720, 480)
             color: Theme.glass
             onClosed: root.open = false
             Component.onCompleted: HyprConf.reload()

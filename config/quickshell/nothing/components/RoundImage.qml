@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Effects
+import QtQuick.Window
 import qs.services
 
 // Image clipped to a rounded rect.
@@ -17,7 +18,8 @@ Item {
         fillMode: Image.PreserveAspectCrop
         // image://icon lookups aren't thread-safe; only files load async.
         asynchronous: !String(source).startsWith("image://")
-        sourceSize: root.thumb > 0 ? Qt.size(root.thumb, root.thumb) : undefined
+        // thumb is in logical px; decode for the screen's pixel density
+        sourceSize: root.thumb > 0 ? Qt.size(root.thumb * (Screen.devicePixelRatio || 1), root.thumb * (Screen.devicePixelRatio || 1)) : undefined
         visible: false
     }
     Rectangle {

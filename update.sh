@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
 # Everything-dots auto-updater (run by everything-dots-update.timer).
-# Fast-forwards the repo, re-links configs, reloads Hyprland and restarts the
-# shell - unless you have local edits, or the screen is locked.
+# Fast-forwards the repo and re-links configs. If a Hyprland session is
+# running it reloads it and restarts the shell *inside* that session; in any
+# other desktop (Plasma, niri, ...) it only updates files.
 set -uo pipefail
 DOTS="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 cd "$DOTS" || exit 1
-
-# Reach the running Hyprland session from a systemd user service.
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
-if [[ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
-    sig=$(ls -t "$XDG_RUNTIME_DIR/hypr" 2>/dev/null | head -n1)
-    [[ -n "$sig" ]] && export HYPRLAND_INSTANCE_SIGNATURE="$sig"
-fi
-export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-1}"
-notify() { command -v notify-send >/dev/null && notify-send -a Everything-dots "$@"; }
+notify() { command -v notify-send >/dev/null && notify-send -a Everything-dots "$@" 2>/dev/null; }
+
+# A live Hyprland instance of ours (stale runtime dirs are ignored).
+hypr_sig() {
+    local d
+    for d in $(ls -t "$XDG_RUNTIME_DIR/hypr" 2>/dev/null); do
+        HYPRLAND_INSTANCE_SIGNATURE="$d" hyprctl version >/dev/null 2>&1 && { echo "$d"; return 0; }
+    done
+    return 1
+}
 
 git fetch --quiet origin || exit 0
 [[ "$(git rev-parse @)" == "$(git rev-parse '@{u}')" ]] && exit 0
@@ -23,16 +26,17 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
 fi
 before=$(git rev-parse --short @)
 git pull --ff-only --quiet || { notify "Update failed" "git pull couldn't fast-forward"; exit 1; }
-
 "$DOTS/install.sh" --link-only --quiet
 
-# New packages upstream? Say so rather than sudo-ing unattended.
 if git diff --name-only "$before" @ | grep -qx install.sh; then
     notify "Everything-dots updated" "The installer changed - run ~/Everything-dots/install.sh to pick up new packages"
 fi
 
-if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
+if sig=$(hypr_sig); then
+    export HYPRLAND_INSTANCE_SIGNATURE="$sig"
     hyprctl reload >/dev/null 2>&1
-    "$HOME/.config/quickshell/nothing/scripts/restart.sh" >/dev/null 2>&1 # refuses while locked
+    # run inside Hyprland so the shell gets the session's environment;
+    # restart.sh itself refuses while the screen is locked
+    hyprctl dispatch 'hl.dsp.exec_cmd("~/.config/quickshell/nothing/scripts/restart.sh")' >/dev/null 2>&1
 fi
 notify "Everything-dots updated" "$(git log -1 --format=%s)"

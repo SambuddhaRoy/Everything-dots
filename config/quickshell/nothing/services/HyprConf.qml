@@ -21,7 +21,7 @@ Singleton {
         "decoration:blur:enabled", "decoration:blur:size", "decoration:blur:passes", "decoration:blur:vibrancy",
         "decoration:blur:noise", "decoration:blur:xray", "decoration:blur:popups",
         "decoration:shadow:enabled", "decoration:shadow:range", "decoration:shadow:render_power",
-        "animations:enabled", "dwindle:preserve_split", "dwindle:smart_split", "master:new_status",
+        "animations:enabled", "render:cm_enabled", "render:cm_auto_hdr", "render:send_content_type", "dwindle:preserve_split", "dwindle:smart_split", "master:new_status",
         "input:kb_layout", "input:kb_variant", "input:kb_options", "input:repeat_rate", "input:repeat_delay",
         "input:numlock_by_default", "input:sensitivity", "input:accel_profile", "input:natural_scroll",
         "input:follow_mouse", "input:scroll_factor", "input:left_handed",
@@ -79,16 +79,34 @@ Singleton {
     }
 
     // --- Monitors: applied live, then reverted unless confirmed.
-    property var pendingMonitor: null // { name, previous }
-    function setMonitor(name, patch) {
+    // A monitor's settings are one object with every field we manage, so a
+    // change to one (say HDR) never drops the others:
+    //   mode "WxH@Hz" | scale (number or "auto") | position | transform 0-7
+    //   cm "srgb"|"wide"|"hdr"|"hdredid"|"auto" | bitdepth 8|10
+    //   sdrbrightness | sdrsaturation (HDR only) | vrr 0|1|2 | icc path
+    property var pendingMonitor: null // { name, previous, next }
+    function monitorState(name) {
         const mon = monitors.find(m => m.name === name);
         if (!mon)
-            return;
-        const cur = monitorOverrides[name] ?? {
+            return null;
+        const live = {
             mode: mon.width + "x" + mon.height + "@" + mon.refreshRate.toFixed(2),
             scale: mon.scale,
-            position: mon.x + "x" + mon.y
+            position: mon.x + "x" + mon.y,
+            transform: mon.transform ?? 0,
+            cm: mon.colorManagementPreset ?? "srgb",
+            bitdepth: String(mon.currentFormat ?? "").includes("2101010") ? 10 : 8,
+            sdrbrightness: mon.sdrBrightness ?? 1,
+            sdrsaturation: mon.sdrSaturation ?? 1,
+            // vrr: only once set per monitor (otherwise the global misc:vrr applies)
+            icc: ""
         };
+        return Object.assign(live, monitorOverrides[name] ?? {});
+    }
+    function setMonitor(name, patch) {
+        const cur = monitorState(name);
+        if (!cur)
+            return;
         const next = Object.assign({}, cur, patch);
         pendingMonitor = { name: name, previous: cur, next: next };
         eval_(monitorLua(name, next));
@@ -113,9 +131,18 @@ Singleton {
         revertTimer.stop();
         monReaderLater.restart();
     }
+    function resetMonitor(name) {
+        const m = Object.assign({}, monitorOverrides);
+        delete m[name];
+        monitorOverrides = m;
+        persist();
+        Quickshell.execDetached(["sh", "-c", "sleep 0.2; hyprctl reload"]);
+        reloadLater.restart();
+    }
+    readonly property int revertSeconds: 15
     Timer {
         id: revertTimer
-        interval: 12000
+        interval: root.revertSeconds * 1000
         onTriggered: root.revertMonitor()
     }
 
@@ -143,8 +170,21 @@ Singleton {
         return "hl.config({\n" + render(tree, "    ") + "\n})";
     }
     function monitorLua(name, m) {
-        return "hl.monitor({ output = " + JSON.stringify(name) + ", mode = " + JSON.stringify(m.mode)
-            + ", position = " + JSON.stringify(m.position) + ", scale = " + m.scale + " })";
+        const f = ["output = " + JSON.stringify(name), "mode = " + JSON.stringify(m.mode),
+            "position = " + JSON.stringify(m.position), "scale = " + luaValue(m.scale),
+            "transform = " + (m.transform ?? 0), "cm = " + JSON.stringify(m.cm ?? "srgb"),
+            "bitdepth = " + (m.bitdepth ?? 8)];
+        if (m.vrr !== undefined)
+            f.push("vrr = " + m.vrr);
+        if (String(m.cm).startsWith("hdr")) {
+            f.push("sdrbrightness = " + (m.sdrbrightness ?? 1));
+            f.push("sdrsaturation = " + (m.sdrsaturation ?? 1));
+        }
+        if (m.icc)
+            f.push("icc = " + JSON.stringify(m.icc));
+        if (m.supports_hdr)
+            f.push("supports_hdr = 1", "supports_wide_color = 1");
+        return "hl.monitor({ " + f.join(", ") + " })";
     }
     function eval_(lua) {
         Quickshell.execDetached(["hyprctl", "eval", lua]);

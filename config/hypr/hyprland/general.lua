@@ -1,10 +1,13 @@
 -- Look & feel: flat, borderless (focus = opacity), no shadows; blur behind translucency. Colours: hyprland/colors.lua
 
+-- Any monitor without its own rule: native resolution and a scale Hyprland
+-- picks from the panel's DPI (so 4K / hi-DPI screens aren't tiny). Per-monitor
+-- choices from Settings > Display land in hyprland/settings.lua.
 hl.monitor({
     output = "",
     mode = "preferred",
     position = "auto",
-    scale = 1
+    scale = "auto"
 })
 
 hl.gesture({ fingers = 3, direction = "swipe", action = "move" })

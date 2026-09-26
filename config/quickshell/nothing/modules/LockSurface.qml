@@ -34,7 +34,7 @@ Item {
         anchors.fill: parent
         source: Appearance.wallpaper ? "file://" + Appearance.wallpaper : ""
         fillMode: Image.PreserveAspectCrop
-        sourceSize: Qt.size(width / 2, height / 2)
+        sourceSize: Qt.size(width / 2, height / 2) // blurred anyway: half-res is plenty
         asynchronous: true
         visible: false
     }

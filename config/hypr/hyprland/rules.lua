@@ -68,7 +68,6 @@ hl.window_rule({ match = { title = "^(Lock screen preview)$" }, float = true })
 hl.window_rule({ match = { title = "^(Lock screen preview)$" }, center = true })
 hl.window_rule({ match = { title = "^(Nothing Settings)$" }, float = true })
 hl.window_rule({ match = { title = "^(Nothing Settings)$" }, center = true })
-hl.window_rule({ match = { title = "^(Nothing Settings)$" }, size = { 1000, 680 } })
 
 -- Desktop widgets: frosted like the pill
 hl.layer_rule({ match = { namespace = "nothing:widgets" }, blur = true })

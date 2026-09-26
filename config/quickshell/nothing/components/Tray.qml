@@ -49,7 +49,7 @@ Item {
                             id: img
                             anchors.fill: parent
                             source: tray.modelData.icon
-                            sourceSize: Qt.size(32, 32)
+                            sourceSize: Qt.size(48, 48)
                             visible: false
                         }
                         MultiEffect {

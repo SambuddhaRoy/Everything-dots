@@ -5,8 +5,10 @@ hl.on("hyprland.start", function()
     -- Core
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
     hl.exec_cmd("hypridle")
-    hl.exec_cmd("dbus-update-activation-environment --all")
-    hl.exec_cmd("sleep 1 && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    -- Only what portals/services need. (Not --all: that would push this
+    -- session's PATH, kitty and Qt settings into the systemd user session,
+    -- where they can leak into Plasma or niri.)
+    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP HYPRLAND_INSTANCE_SIGNATURE")
 
     -- Audio
     hl.exec_cmd("easyeffects --hide-window --service-mode")

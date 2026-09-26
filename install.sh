@@ -104,7 +104,17 @@ install_packages() {
     say "Checking packages"
     local repo=() aur=() missing
     # pacman -T understands "provides", so e.g. quickshell-git satisfies quickshell
-    for p in "${REPO_PKGS[@]}"; do pacman -T "$p" >/dev/null 2>&1 || repo+=("$p"); done
+    local skip=()
+    # PulseAudio setups (older Plasma installs): pipewire-pulse would ask to
+    # remove it. Leave audio alone; the shell's volume/waveform need PipeWire.
+    if pacman -Qq pulseaudio >/dev/null 2>&1; then
+        skip+=(pipewire-pulse wireplumber)
+        note "PulseAudio is installed - leaving your audio stack alone (volume controls need PipeWire)"
+    fi
+    for p in "${REPO_PKGS[@]}"; do
+        [[ " ${skip[*]} " == *" $p "* ]] && continue
+        pacman -T "$p" >/dev/null 2>&1 || repo+=("$p")
+    done
     for pair in "${FLEX_PKGS[@]}"; do
         local name="${pair%%|*}" alt="${pair##*|}"
         pacman -T "$name" >/dev/null 2>&1 && continue
@@ -142,9 +152,25 @@ install_fonts() {
 }
 
 # ---------------------------------------------------------------- configs
+# A Hyprland config that isn't ours is moved aside whole (not merged file by
+# file), so leftovers can't clash. Nothing outside ~/.config/hypr and
+# ~/.config/quickshell/nothing is ever touched: Plasma, niri, other
+# Quickshell configs, kitty, GTK and matugen setups are left as they are.
+adopt_dir() {
+    local dir="$HOME/.config/$1"
+    [[ -d "$dir" && ! -L "$dir" ]] || return 0
+    find "$dir" -type l -lname "$DOTS/*" -print -quit | grep -q . && return 0 # already ours
+    [[ -z "$(ls -A "$dir")" ]] && return 0
+    mkdir -p "$BACKUP"
+    mv "$dir" "$BACKUP/$1"
+    note "moved your existing ~/.config/$1 to ${BACKUP/#$HOME/~}/$1"
+}
+
 link_configs() {
     say "Linking configs into ~/.config"
     local src rel dst n=0
+    adopt_dir hypr
+    adopt_dir quickshell/nothing
     while IFS= read -r -d '' src; do
         rel="${src#"$DOTS/config/"}"
         dst="$HOME/.config/$rel"
@@ -171,9 +197,15 @@ link_configs() {
 # ---------------------------------------------------------------- system
 enable_services() {
     local s todo=()
-    for s in NetworkManager bluetooth; do
-        systemctl is-enabled "$s" >/dev/null 2>&1 || todo+=("$s")
+    # Don't fight another network daemon (systemd-networkd, iwd, connman...).
+    local other=""
+    for s in systemd-networkd iwd connman dhcpcd netctl; do
+        systemctl is-active --quiet "$s" 2>/dev/null && other="$s"
     done
+    if systemctl is-enabled NetworkManager >/dev/null 2>&1; then :
+    elif [[ -n "$other" ]]; then note "$other manages your network - not enabling NetworkManager (the Wi-Fi panel needs it)"
+    else todo+=(NetworkManager); fi
+    systemctl is-enabled bluetooth >/dev/null 2>&1 || todo+=(bluetooth)
     ((${#todo[@]})) || return 0
     say "Enabling ${todo[*]}"
     ask "Enable and start ${todo[*]}?" && sudo systemctl enable --now "${todo[@]}"
@@ -256,5 +288,6 @@ cat <<EOF
   Log into the Hyprland session (or run ${c_b}hyprctl reload${c_off} if you're in it).
   Tap Super for the launcher, Super+I for Settings, Super+Print to capture.
   Your dots live in ${DOTS/#$HOME/~} and update themselves.
+  Other desktops (Plasma, niri, ...) are untouched - pick Hyprland at login.
 
 EOF

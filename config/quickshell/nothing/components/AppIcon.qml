@@ -19,7 +19,7 @@ Item {
         id: img
         anchors.fill: parent
         source: Quickshell.iconPath(root.icon, "application-x-executable")
-        sourceSize: Qt.size(64, 64)
+        sourceSize: Qt.size(128, 128) // sharp up to 2x at the largest (44px) size
         asynchronous: false
         cache: true
         smooth: true

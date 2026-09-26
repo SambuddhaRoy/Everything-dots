@@ -45,6 +45,22 @@ Options: `--yes` · `--no-packages` · `--no-autoupdate` · `--link-only`
 </details>
 
 <details>
+<summary>Plays well with other desktops</summary>
+
+Install it next to KDE Plasma, niri, GNOME or anything else, and pick
+Hyprland at the login screen.
+
+- **Touches only two folders:** `~/.config/hypr` and `~/.config/quickshell/nothing`. An existing Hyprland config is moved aside whole to `~/.config/everything-dots-backup/`, never merged into.
+- **Leaves everything else alone:** Plasma and niri configs, other Quickshell shells (such as a niri shell), and kitty, fuzzel, GTK and matugen setups.
+- **Stays inside the Hyprland session:**
+  - Theming for kitty, fuzzel and Qt lives only in the Hyprland session.
+  - Only a handful of variables go to the systemd user session (the ones portals need), so nothing leaks into your other desktops.
+- **The updater is session-aware:** it only reloads a *running* Hyprland session. Restarts go through `qs kill -c nothing`, which can't touch another desktop's shell.
+- **System services:** it won't enable NetworkManager if systemd-networkd, iwd or connman already manage your network, and won't replace PulseAudio.
+
+</details>
+
+<details>
 <summary>How updates work</summary>
 
 `everything-dots-update.timer` runs every 6 hours (and 10 minutes after boot):
@@ -94,6 +110,12 @@ dots chase while charging), system meters and a sticky note. All of them can be 
 | **Brutalist.** One switch removes every rounded corner and squares the dots. | **Light.** White glass, same rules. |
 | <img src="assets/settings-appearance.webp" alt="Settings: appearance"> | <img src="assets/settings-keybinds.webp" alt="Settings: keybinds"> |
 | **Settings** (`Super + I`). 14 pages, from window gaps to per-app volume. | **Keybind editor.** Shows what every bind does. Rebind to apps, commands or actions. |
+
+**Displays.**
+- New monitors get their native resolution and a scale picked from the panel's DPI, so hi-DPI screens work out of the box, and every image in the shell is decoded at the screen's real pixel density.
+- Settings › Display sets resolution, refresh rate, scale (auto or 1–3×), rotation and variable refresh per monitor.
+- Colour: sRGB, wide gamut or HDR, 10-bit, SDR brightness and saturation under HDR, and ICC profiles.
+- Every change reverts after 15 seconds unless you keep it.
 
 **Colour.**
 - The wallpaper decides, but you choose which of its colours leads, and surfaces stay neutral.

@@ -34,7 +34,7 @@ hl.bind("CTRL + SUPER + ALT + T", hl.dsp.global("quickshell:wallpaperSelectorRan
     { description = "Shell: Random wallpaper" })
 hl.bind("CTRL + SUPER + SHIFT + D", hl.dsp.global("quickshell:toggleLightDark"),
     { description = "Shell: Toggle light/dark mode" })
-hl.bind("CTRL + SUPER + R", hl.dsp.exec_cmd("killall qs quickshell; qs -c $qsConfig &"),
+hl.bind("CTRL + SUPER + R", hl.dsp.exec_cmd("$HOME/.config/quickshell/nothing/scripts/restart.sh"),
     { description = "Shell: Restart" })
 
 --##! Utilities

@@ -117,7 +117,7 @@ Column {
             Image {
                 required property int index
                 source: Quickshell.iconPath(Apps.all[index]?.icon ?? "", "application-x-executable")
-                sourceSize: Qt.size(64, 64)
+                sourceSize: Qt.size(128, 128) // must match AppIcon for cache hits
                 cache: true
             }
         }

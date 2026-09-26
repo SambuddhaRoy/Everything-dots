@@ -103,5 +103,9 @@ python3 "$SHELL_DIR/scripts/kitty.py" "$STATE_DIR/colors.json" "$STATE_DIR/kitty
 if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
     hyprctl eval "$(cat "$HOME/.config/hypr/hyprland/colors.lua")" >/dev/null
 fi
-pkill -USR1 -x kitty 2>/dev/null
+# Reload only this session's kitties (the ones using our config dir), not
+# kitty windows from other desktops.
+for pid in $(pgrep -x kitty); do
+    grep -qzx "KITTY_CONFIG_DIRECTORY=$SHELL_DIR/apps/kitty" "/proc/$pid/environ" 2>/dev/null && kill -USR1 "$pid"
+done
 exit 0

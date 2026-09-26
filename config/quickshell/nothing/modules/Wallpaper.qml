@@ -57,7 +57,8 @@ PanelWindow {
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         cache: false
-        sourceSize: Qt.size(win.width, win.height)
+        // decode at physical pixels, so hi-DPI / fractional scaling stays sharp
+        sourceSize: Qt.size(win.width * win.devicePixelRatio, win.height * win.devicePixelRatio)
         opacity: 0
         onStatusChanged: {
             if (status === Image.Ready && this === win.back)
